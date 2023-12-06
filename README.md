@@ -1,7 +1,7 @@
 # Recipe Plus
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/mrivnak/recipe-plus/build.yml)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/mrivnak/recipe-plug/test.yml?label=tests)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/mrivnak/recipe-plus/test.yml?label=tests)
 [![Coverage Status](https://coveralls.io/repos/github/mrivnak/recipe-plus/badge.svg?branch=main)](https://coveralls.io/github/mrivnak/recipe-plus?branch=main)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/mrivnak/recipe-plus)
 
