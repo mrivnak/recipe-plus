@@ -1,75 +1,49 @@
-<picture>
-    <source srcset="https://raw.githubusercontent.com/leptos-rs/leptos/main/docs/logos/Leptos_logo_Solid_White.svg" media="(prefers-color-scheme: dark)">
-    <img src="https://raw.githubusercontent.com/leptos-rs/leptos/main/docs/logos/Leptos_logo_RGB.svg" alt="Leptos Logo">
-</picture>
+# Recipe Plus
 
-# Leptos Axum Starter Template
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/mrivnak/recipe-plus/build.yml)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/mrivnak/recipe-plug/test.yml?label=tests)
+[![Coverage Status](https://coveralls.io/repos/github/mrivnak/recipe-plus/badge.svg?branch=main)](https://coveralls.io/github/mrivnak/recipe-plus?branch=main)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/mrivnak/recipe-plus)
 
-This is a template for use with the [Leptos](https://github.com/leptos-rs/leptos) web framework and the [cargo-leptos](https://github.com/akesson/cargo-leptos) tool using [Axum](https://github.com/tokio-rs/axum).
+![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)
+![Axum](https://img.shields.io/badge/axum-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)
+![Leptos](https://img.shields.io/badge/leptos-%23FF0135.svg?style=for-the-badge&logo=leptos&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+![Coveralls](https://img.shields.io/badge/coveralls-%23b94947.svg?style=for-the-badge&logo=coveralls&logoColor=white)
+![Renovate](https://img.shields.io/badge/renovate-%230281a1?style=for-the-badge&logo=renovatebot&logoColor=white)
 
-## Creating your template repo
+Self-hosted recipe manager with a focus on usability and readability.
 
-If you don't have `cargo-leptos` installed you can install it with
+## Features
 
-```bash
-cargo install cargo-leptos
-```
+- Resize recipes proportionally
+- Convert between metric and imperial units
+- Quickly reference quantities in the instructions with tooltips
 
-Then run
-```bash
-cargo leptos new --git leptos-rs/start-axum
-```
+## Development
 
-to generate a new project template.
+### Prerequisites
 
-```bash
-cd recipe-plus
-```
+- [Rust](https://www.rust-lang.org/tools/install)
+- [Rustup](https://rustup.rs/) // to install toolchains
+- [cargo-leptos](https://crates.io/crates/cargo-leptos)
 
-to go to your newly created project.  
-Feel free to explore the project structure, but the best place to start with your application code is in `src/app.rs`.  
-Addtionally, Cargo.toml may need updating as new versions of the dependencies are released, especially if things are not working after a `cargo update`.
-
-## Running your project
+This project requires nightly Rust. To install nightly, run:
 
 ```bash
-cargo leptos watch
+rustup toolchain install nightly
 ```
 
-## Installing Additional Tools
+as well as the wasm32-unknown-unknown target:
 
-By default, `cargo-leptos` uses `nightly` Rust, `cargo-generate`, and `sass`. If you run into any trouble, you may need to install one or more of these tools.
-
-1. `rustup toolchain install nightly --allow-downgrade` - make sure you have Rust nightly
-2. `rustup target add wasm32-unknown-unknown` - add the ability to compile Rust to WebAssembly
-3. `cargo install cargo-generate` - install `cargo-generate` binary (should be installed automatically in future)
-4. `npm install -g sass` - install `dart-sass` (should be optional in future
-
-## Compiling for Release
 ```bash
-cargo leptos build --release
+rustup target add wasm32-unknown-unknown --toolchain nightly
 ```
 
-Will generate your server binary in target/server/release and your site package in target/site
+### Running
 
+Use `cargo-leptos` to run the project:
 
-## Executing a Server on a Remote Machine Without the Toolchain
-After running a `cargo leptos build --release` the minimum files needed are:
-
-1. The server binary located in `target/server/release`
-2. The `site` directory and all files within located in `target/site`
-
-Copy these files to your remote server. The directory structure should be:
-```text
-recipe-plus
-site/
+```bash
+cargo leptos serve
 ```
-Set the following environment variables (updating for your project as needed):
-```text
-LEPTOS_OUTPUT_NAME="recipe-plus"
-LEPTOS_SITE_ROOT="site"
-LEPTOS_SITE_PKG_DIR="pkg"
-LEPTOS_SITE_ADDR="127.0.0.1:3000"
-LEPTOS_RELOAD_PORT="3001"
-```
-Finally, run the server binary.
