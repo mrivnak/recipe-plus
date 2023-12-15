@@ -11,36 +11,39 @@ RUN cargo install trunk
 RUN cargo install diesel_cli --no-default-features --features sqlite
 
 WORKDIR /app
-COPY . .
+COPY recipe-plus-api recipe-plus-api
 RUN rm -f db.sqlite
 
 # Run migrations
 ENV DATABASE_URL=/app/db.sqlite
-RUN cd recipe-plus-server && diesel migration run
+RUN cd recipe-plus-api && diesel migration run
 
 # Build backend
-RUN cargo build --release --bin recipe-plus-server
+RUN cd recipe-plus-api && cargo build --release
+
+FROM node:latest
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+WORKDIR /app
+COPY recipe-plus-web recipe-plus-web
 
 # Build frontend
-RUN cd recipe-plus && trunk build --release
-
-FROM nginx:mainline
+RUN cd recipe-plus-web && pnpm install && pnpm run build
 
 RUN apt update && apt install -y python3
 
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY --from=build /app/recipe-plus/nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/target/release/recipe-plus-server /usr/bin/recipe-plus-server
-COPY --from=build /app/recipe-plus-server/db.sqlite3 /app/db.sqlite
-COPY --from=build /app/run.py /app/run.py
+COPY --from=build /app/recipe-plus-api/target/release/recipe-plus-api /app/recipe-plus-api
+COPY --from=build /app/recipe-plus-api/db.sqlite /app/db.sqlite
+COPY run.py /app/run.py
 
-WORKDIR /app
+ARG NUXT_PORT=3000
+ENV NITRO_PORT=$NUXT_PORT
+ENV DATABASE_URL=/app/db.sqlite
 
-ARG NGINX_PORT=3000
-
-EXPOSE $NGINX_PORT
+EXPOSE $NUXT_PORT
 EXPOSE 8000
-
-RUN sed -i "s/listen 3000;/listen $NGINX_PORT;/" /etc/nginx/nginx.conf
 
 CMD ["/usr/bin/python3", "run.py", "--prod"]

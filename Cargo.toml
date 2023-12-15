@@ -1,6 +1,0 @@
-[workspace]
-members = [
-    "recipe-plus",
-    "recipe-plus-server"
-]
-resolver = "2"

@@ -1,13 +1,16 @@
+use crate::responses::GetRecipesResponse;
 use axum::extract::State;
 use axum::http::StatusCode;
 use axum::{routing::get, Json, Router};
 use deadpool_diesel::sqlite::{Manager, Pool};
 use diesel::prelude::*;
 use dotenvy::dotenv;
-use recipe_plus_server::responses::GetRecipesResponse;
-use recipe_plus_server::{models, schema};
 use std::env;
 use tokio::net::TcpListener;
+
+mod models;
+mod responses;
+mod schema;
 
 #[tokio::main]
 async fn main() {

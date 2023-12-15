@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 import subprocess
 import time
 
 def run_backend(prod: bool = False) -> subprocess.Popen:
     if prod:
-        return subprocess.Popen(["recipe-plus-server"])
+        return subprocess.Popen(["./recipe-plus-api"])
     else:
-        return subprocess.Popen(["cargo", "run"], cwd="recipe-plus-server")
+        return subprocess.Popen(["cargo", "run"], cwd="recipe-plus-api")
 
 
 def run_frontend(prod: bool = False) -> subprocess.Popen:
     if prod:
-        return subprocess.Popen(["nginx", "-g", "daemon off;"])
+        return subprocess.Popen(["node", ".output/server/index.mjs"], env=os.environ, cwd="recipe-plus-web")
     else:
-        return subprocess.Popen(["trunk", "serve"], cwd="recipe-plus")
+        return subprocess.Popen(["pnpm", "dev"], cwd="recipe-plus-web")
 
 
 def is_exited(processes: list[subprocess.Popen]) -> bool:
