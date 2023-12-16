@@ -7,7 +7,7 @@ use dotenvy::dotenv;
 use std::env;
 use tokio::net::TcpListener;
 use crate::errors::internal_error;
-use crate::models::{Ingredient, Recipe};
+use crate::models::{CreateRecipe, Ingredient, Recipe};
 
 mod models;
 mod schema;
@@ -23,7 +23,8 @@ async fn main() {
 
     let api_router = Router::new()
         .route("/status", get(|| async { "OK" }))
-        .route("/recipes", get(get_recipes))
+        .route("/recipes", get(get_recipes).post(create_recipe))
+        .route("/recipes/:id", get(get_recipe))
         .route("/recipes/:id/ingredients", get(get_ingredients))
         .with_state(pool);
 
@@ -53,6 +54,46 @@ async fn get_recipes(
         .map_err(internal_error)?
         .map_err(internal_error)?;
     Ok(Json(res))
+}
+
+async fn get_recipe(
+    Path(r_id): Path<i32>,
+    State(pool): State<Pool>,
+) -> Result<Json<Recipe>, (StatusCode, String)> {
+    use schema::recipes::dsl::*;
+
+    let conn = pool.get().await.map_err(internal_error)?;
+    let res = conn
+        .interact(move |conn| {
+            recipes
+                .find(r_id)
+                .select(Recipe::as_select())
+                .first(conn)
+        })
+        .await
+        .map_err(internal_error)?
+        .map_err(internal_error)?;
+    Ok(Json(res))
+}
+
+async fn create_recipe(
+    State(pool): State<Pool>,
+    Json(recipe): Json<CreateRecipe>,
+) -> Result<(StatusCode, Json<Recipe>), (StatusCode, String)> {
+    use schema::recipes::dsl::*;
+
+    let conn = pool.get().await.map_err(internal_error)?;
+    let r_id = conn
+        .interact(move |conn| {
+            diesel::insert_into(recipes)
+                .values(&recipe)
+                .returning(Recipe::as_select())
+                .get_result(conn)
+        })
+        .await
+        .map_err(internal_error)?
+        .map_err(internal_error)?;
+    Ok((StatusCode::CREATED, Json(r_id)))
 }
 
 async fn get_ingredients(

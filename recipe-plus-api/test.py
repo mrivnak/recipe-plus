@@ -17,20 +17,22 @@ def start_server() -> subprocess.Popen:
         subprocess.Popen: _description_
     """
     db_url = Path(tempfile.gettempdir()).joinpath(str(uuid.uuid4()) + ".sqlite")
+    print(f"Using database: {db_url}")
+    env = os.environ.copy()
+    env["DATABASE_URL"] = str(db_url)
     # Build backend
-    subprocess.run(["cargo", "build", "--release"], check=True, env=os.environ)
+    subprocess.run(["cargo", "build", "--release"], check=True, env=env)
     # Run migrations
     subprocess.run(
         ["diesel", "migration", "run"],
         check=True,
-        env=os.environ.copy().update({"DATABASE_URL": db_url}),
+        env=env,
     )
 
     # Start server
     proc = subprocess.Popen(
         ["target/release/recipe-plus-api"],
-        env=os.environ.copy().update({"DATABASE_URL": db_url}),
-        stdout=subprocess.DEVNULL,
+        env=env
     )
     time.sleep(1)  # wait for server to start
     return proc

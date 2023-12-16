@@ -1,6 +1,14 @@
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
+#[derive(Deserialize, Serialize, Insertable)]
+#[diesel(table_name = crate::schema::recipes)]
+pub struct CreateRecipe {
+    pub title: String,
+    pub description: String,
+}
+
+
 #[derive(Deserialize, Serialize, Queryable, Selectable)]
 #[diesel(table_name = crate::schema::recipes)]
 pub struct Recipe {

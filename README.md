@@ -12,6 +12,7 @@
 
 ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Cucumber](https://img.shields.io/badge/cucumber-%2323d96c.svg?style=for-the-badge&logo=cucumber&logoColor=white)
 
 Self-hosted recipe manager with a focus on usability and readability.
 

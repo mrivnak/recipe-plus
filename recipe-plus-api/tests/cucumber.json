@@ -1,8 +1,9 @@
 {
   "default": {
     "parallel": 1,
+    "order": "defined",
     "format": [
-      "summary",
+      "progress",
       "junit:test_results.xml"
     ]
   }
