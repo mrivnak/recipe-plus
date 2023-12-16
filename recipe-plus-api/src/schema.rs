@@ -29,4 +29,8 @@ diesel::table! {
 diesel::joinable!(ingredients -> recipes (recipe_id));
 diesel::joinable!(steps -> recipes (recipe_id));
 
-diesel::allow_tables_to_appear_in_same_query!(ingredients, recipes, steps,);
+diesel::allow_tables_to_appear_in_same_query!(
+    ingredients,
+    recipes,
+    steps,
+);

@@ -1,5 +1,4 @@
-use crate::responses::GetRecipesResponse;
-use axum::extract::State;
+use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::{routing::get, Json, Router};
 use deadpool_diesel::sqlite::{Manager, Pool};
@@ -7,10 +6,12 @@ use diesel::prelude::*;
 use dotenvy::dotenv;
 use std::env;
 use tokio::net::TcpListener;
+use crate::errors::internal_error;
+use crate::models::{Ingredient, Recipe};
 
 mod models;
-mod responses;
 mod schema;
+mod errors;
 
 #[tokio::main]
 async fn main() {
@@ -23,6 +24,7 @@ async fn main() {
     let api_router = Router::new()
         .route("/status", get(|| async { "OK" }))
         .route("/recipes", get(get_recipes))
+        .route("/recipes/:id/ingredients", get(get_ingredients))
         .with_state(pool);
 
     axum::serve(
@@ -37,23 +39,38 @@ async fn main() {
 
 async fn get_recipes(
     State(pool): State<Pool>,
-) -> Result<Json<GetRecipesResponse>, (StatusCode, String)> {
+) -> Result<Json<Vec<Recipe>>, (StatusCode, String)> {
+    use schema::recipes::dsl::*;
+
     let conn = pool.get().await.map_err(internal_error)?;
     let res = conn
         .interact(|conn| {
-            schema::recipes::table
-                .select(models::Recipe::as_select())
-                .load::<models::Recipe>(conn)
+            recipes
+                .select(Recipe::as_select())
+                .load::<Recipe>(conn)
         })
         .await
         .map_err(internal_error)?
         .map_err(internal_error)?;
-    Ok(Json(GetRecipesResponse { recipes: res }))
+    Ok(Json(res))
 }
 
-fn internal_error<E>(err: E) -> (StatusCode, String)
-where
-    E: std::error::Error,
-{
-    (StatusCode::INTERNAL_SERVER_ERROR, err.to_string())
+async fn get_ingredients(
+    Path(r_id): Path<i32>,
+    State(pool): State<Pool>,
+) -> Result<Json<Vec<Ingredient>>, (StatusCode, String)> {
+    use schema::ingredients::dsl::*;
+
+    let conn = pool.get().await.map_err(internal_error)?;
+    let res = conn
+        .interact(move |conn| {
+            ingredients
+                .select(Ingredient::as_select())
+                .filter(recipe_id.eq(r_id))
+                .load::<Ingredient>(conn)
+        })
+        .await
+        .map_err(internal_error)?
+        .map_err(internal_error)?;
+    Ok(Json(res))
 }

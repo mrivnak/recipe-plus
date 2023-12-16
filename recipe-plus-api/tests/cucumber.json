@@ -1,0 +1,9 @@
+{
+  "default": {
+    "parallel": 1,
+    "format": [
+      "summary",
+      "junit:test_results.xml"
+    ]
+  }
+}

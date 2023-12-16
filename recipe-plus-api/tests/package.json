@@ -1,0 +1,11 @@
+{
+  "name": "tests",
+  "type": "module",
+  "scripts": {
+    "test": "cucumber-js"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^10.0.1",
+    "node-fetch": "^3.3.2"
+  }
+}
