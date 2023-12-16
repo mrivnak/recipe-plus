@@ -1,3 +1,5 @@
+use crate::errors::internal_error;
+use crate::models::{CreateRecipe, Ingredient, Recipe};
 use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::{routing::get, Json, Router};
@@ -6,12 +8,10 @@ use diesel::prelude::*;
 use dotenvy::dotenv;
 use std::env;
 use tokio::net::TcpListener;
-use crate::errors::internal_error;
-use crate::models::{CreateRecipe, Ingredient, Recipe};
 
+mod errors;
 mod models;
 mod schema;
-mod errors;
 
 #[tokio::main]
 async fn main() {
@@ -38,18 +38,12 @@ async fn main() {
     .unwrap();
 }
 
-async fn get_recipes(
-    State(pool): State<Pool>,
-) -> Result<Json<Vec<Recipe>>, (StatusCode, String)> {
+async fn get_recipes(State(pool): State<Pool>) -> Result<Json<Vec<Recipe>>, (StatusCode, String)> {
     use schema::recipes::dsl::*;
 
     let conn = pool.get().await.map_err(internal_error)?;
     let res = conn
-        .interact(|conn| {
-            recipes
-                .select(Recipe::as_select())
-                .load::<Recipe>(conn)
-        })
+        .interact(|conn| recipes.select(Recipe::as_select()).load::<Recipe>(conn))
         .await
         .map_err(internal_error)?
         .map_err(internal_error)?;
@@ -64,12 +58,7 @@ async fn get_recipe(
 
     let conn = pool.get().await.map_err(internal_error)?;
     let res = conn
-        .interact(move |conn| {
-            recipes
-                .find(r_id)
-                .select(Recipe::as_select())
-                .first(conn)
-        })
+        .interact(move |conn| recipes.find(r_id).select(Recipe::as_select()).first(conn))
         .await
         .map_err(internal_error)?
         .map_err(internal_error)?;

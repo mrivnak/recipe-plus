@@ -8,7 +8,6 @@ pub struct CreateRecipe {
     pub description: String,
 }
 
-
 #[derive(Deserialize, Serialize, Queryable, Selectable)]
 #[diesel(table_name = crate::schema::recipes)]
 pub struct Recipe {
