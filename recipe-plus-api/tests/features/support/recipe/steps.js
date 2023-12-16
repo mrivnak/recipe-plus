@@ -14,6 +14,16 @@ When(/I create a (.*) recipe with the description: "(.*)"/, async function(title
   this.status = response.status
 })
 
+When(/I update the recipe with the description: "(.*)"/, async function(desc) {
+  this.status = 523 // Default status code (Origin is unreachable)
+  const response = await fetch("http://" + API_URL + "/recipes/" + this.recipe.id, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ "title": this.recipe.title, "description": desc })
+  })
+  this.status = response.status
+})
+
 Given(/I have a (.*) recipe/, async function(title) {
   this.status = 523 // Default status code (Origin is unreachable)
   const response = await fetch("http://" + API_URL + "/recipes")
@@ -32,6 +42,14 @@ When(/I get the recipe/, async function() {
   if (response.status === 200) {
     this.recipe = await response.json()
   }
+})
+
+When(/I delete the recipe/, async function() {
+  this.status = 523 // Default status code (Origin is unreachable)
+  const response = await fetch("http://" + API_URL + "/recipes/" + this.recipe.id, {
+    method: "DELETE"
+  })
+  this.status = response.status
 })
 
 Then(/I receive a (.*) recipe with the description: "(.*)"/, function(title, desc) {

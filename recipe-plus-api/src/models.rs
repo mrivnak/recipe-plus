@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Insertable)]
+#[derive(Deserialize, Serialize, Insertable, AsChangeset)]
 #[diesel(table_name = crate::schema::recipes)]
 pub struct CreateRecipe {
     pub title: String,
