@@ -37,10 +37,10 @@ Use `cargo` and `pnpm` to run the project:
 
 ```bash
 # Backend
-cd recipe-plus-api && cargo run
+cd api && cargo run
 
 # Frontend
-cd recipe-plus-web && pnpm install && pnpm dev
+cd web && pnpm install && pnpm dev
 ```
 
 > The backend and frontend will run on ports 8000 and 3000, respectively.

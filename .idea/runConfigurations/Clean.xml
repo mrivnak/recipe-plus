@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Clean" type="ShConfigurationType">
-    <option name="SCRIPT_TEXT" value="rm -rf recipe-plus-api/target recipe-plus-api/tests/node_modules recipe-plus-web/node_modules" />
+    <option name="SCRIPT_TEXT" value="rm -rf api/target api/tests/node_modules web/node_modules" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />

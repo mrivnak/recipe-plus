@@ -24,6 +24,13 @@ When(/I update the recipe with the description: "(.*)"/, async function(desc) {
   this.status = response.status
 })
 
+When(/I get the ingredients for the recipe/, async function() {
+  this.status = 523 // Default status code (Origin is unreachable)
+  const response = await fetch("http://" + API_URL + "/recipes/" + this.recipe.id + "/ingredients")
+  this.status = response.status
+  this.ingredients = await response.json()
+})
+
 Given(/I have a (.*) recipe/, async function(title) {
   this.status = 523 // Default status code (Origin is unreachable)
   const response = await fetch("http://" + API_URL + "/recipes")
@@ -57,3 +64,11 @@ Then(/I receive a (.*) recipe with the description: "(.*)"/, function(title, des
   assert.strictEqual(this.recipe.description, desc)
 })
 
+Then(/I receive a list of ingredients/, function() {
+  assert.notStrictEqual(this.ingredients, undefined)
+  assert(Array.isArray(this.ingredients))
+})
+
+Then(/The list of ingredients is empty/, function() {
+  assert.strictEqual(this.ingredients.length, 0)
+})

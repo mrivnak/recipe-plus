@@ -1,5 +1,5 @@
 [package]
-name = "recipe-plus-api"
+name = "recipe-plus"
 version = "0.1.0"
 edition = "2021"
 

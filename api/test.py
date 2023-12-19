@@ -31,7 +31,7 @@ def start_server() -> subprocess.Popen:
 
     # Start server
     proc = subprocess.Popen(
-        ["target/release/recipe-plus-api"],
+        ["target/release/recipe-plus"],
         env=env
     )
     time.sleep(1)  # wait for server to start

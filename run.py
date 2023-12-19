@@ -7,16 +7,16 @@ import time
 
 def run_backend(prod: bool = False) -> subprocess.Popen:
     if prod:
-        return subprocess.Popen(["./recipe-plus-api"])
+        return subprocess.Popen(["./recipe-plus"])
     else:
-        return subprocess.Popen(["cargo", "run"], cwd="recipe-plus-api")
+        return subprocess.Popen(["cargo", "run"], cwd="api")
 
 
 def run_frontend(prod: bool = False) -> subprocess.Popen:
     if prod:
-        return subprocess.Popen(["node", ".output/server/index.mjs"], env=os.environ, cwd="recipe-plus-web")
+        return subprocess.Popen(["node", ".output/server/index.mjs"], env=os.environ, cwd="web")
     else:
-        return subprocess.Popen(["pnpm", "dev"], cwd="recipe-plus-web")
+        return subprocess.Popen(["pnpm", "dev"], cwd="web")
 
 
 def is_exited(processes: list[subprocess.Popen]) -> bool:

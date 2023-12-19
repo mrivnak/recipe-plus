@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command" nameIsGenerated="true">
     <option name="command" value="run" />
-    <option name="workingDirectory" value="file://$PROJECT_DIR$/recipe-plus-api" />
+    <option name="workingDirectory" value="file://$PROJECT_DIR$/api" />
     <option name="emulateTerminal" value="true" />
     <option name="channel" value="DEFAULT" />
     <option name="requiredFeatures" value="true" />

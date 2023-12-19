@@ -16,6 +16,13 @@ Feature: Recipe CRUD
     And I get the recipe
     And I receive a bread recipe with the description: "A delicious bread recipe with a new description"
 
+  Scenario: Get ingredients for a recipe
+    Given I have a bread recipe
+    When I get the ingredients for the recipe
+    Then I receive a 200 status code
+    And I receive a list of ingredients
+    And The list of ingredients is empty
+
   Scenario: Delete a recipe
     Given I have a bread recipe
     When I delete the recipe
